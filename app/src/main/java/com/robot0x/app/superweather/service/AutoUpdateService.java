@@ -1,6 +1,7 @@
 package com.robot0x.app.superweather.service;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -10,6 +11,8 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
+import com.robot0x.app.superweather.R;
+import com.robot0x.app.superweather.activity.ChooseAreaActivity;
 import com.robot0x.app.superweather.receiver.AutoUpdateReceiver;
 import com.robot0x.app.superweather.util.HttpCallbackListener;
 import com.robot0x.app.superweather.util.HttpUtil;
@@ -19,6 +22,25 @@ import com.robot0x.app.superweather.util.Utility;
  * Created by Jackie on 2016/2/25.
  */
 public class AutoUpdateService extends Service {
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        Intent notificationIntent = new Intent(this, ChooseAreaActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+        Notification notification = new Notification.Builder(this)
+                .setAutoCancel(false)
+                .setContentTitle("今日天气")
+                .setContentText("")
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setWhen(System.currentTimeMillis())
+                .build();
+        startForeground(1, notification);
+    }
 
     @Nullable
     @Override
